@@ -16,11 +16,12 @@ from multi_person_tracker.data import ImageFolder, images_to_video
 class MPT():
     def __init__(
             self,
+            yolo_weights_file: str,
+            yolo_cfg_file: str,
             device=None,
             batch_size=12,
             display=False,
             detection_threshold=0.7,
-            detector_type='yolo',
             yolo_img_size=608,
             output_format='list',
     ):
@@ -31,7 +32,6 @@ class MPT():
         :param batch_size (int): batch size for detection model
         :param display (bool): display the results of multi person tracking
         :param detection_threshold (float): threshold to filter detector predictions
-        :param detector_type (str, 'maskrcnn' or 'yolo'): detector architecture
         :param yolo_img_size (int): yolo detector input image size
         :param output_format (str, 'dict' or 'list'): result output format
         '''
@@ -46,14 +46,9 @@ class MPT():
         self.detection_threshold = detection_threshold
         self.output_format = output_format
 
-        if detector_type == 'maskrcnn':
-            self.detector = keypointrcnn_resnet50_fpn(pretrained=True).to(self.device).eval()
-        elif detector_type == 'yolo':
-            self.detector = YOLOv3(
-                device=self.device, img_size=yolo_img_size, person_detector=True, video=True, return_dict=True
-            )
-        else:
-            raise ModuleNotFoundError
+        self.detector = YOLOv3(
+            yolo_weights_file, yolo_cfg_file,
+            device=self.device, img_size=yolo_img_size, person_detector=True, video=True, return_dict=True)
 
         self.tracker = Sort()
 
