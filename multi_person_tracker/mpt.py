@@ -24,7 +24,7 @@ class MPT():
             detection_threshold=0.7,
             yolo_img_size=608,
             output_format='list',
-    ):
+            **kwargs):
         '''
         Multi Person Tracker
 
