@@ -16,8 +16,8 @@ from multi_person_tracker.data import ImageFolder, images_to_video
 class MPT():
     def __init__(
             self,
-            yolo_weights_file: str,
-            yolo_cfg_file: str,
+            yolo_weights_file: str = None,
+            yolo_cfg_file: str = None,
             device=None,
             batch_size=12,
             display=False,
@@ -47,7 +47,7 @@ class MPT():
         self.output_format = output_format
 
         self.detector = YOLOv3(
-            yolo_weights_file, yolo_cfg_file,
+            yolo_weights_file=yolo_weights_file, yolo_cfg_file=yolo_cfg_file,
             device=self.device, img_size=yolo_img_size, person_detector=True, video=True, return_dict=True)
 
         self.tracker = Sort()
